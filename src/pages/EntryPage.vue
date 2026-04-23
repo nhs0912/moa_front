@@ -1,54 +1,57 @@
 <template>
-  <section class="flex min-h-screen items-center py-8">
-    <div class="w-full rounded-3xl bg-white p-6 shadow-sm">
-      <p class="text-center text-sm font-medium text-gray-500">
-        사진모아
-      </p>
+  <div
+    class="relative flex w-full max-w-[400px] flex-col items-center overflow-hidden rounded-[40px] bg-white p-12 shadow-2xl shadow-zinc-200/50">
 
-      <div class="mt-6 flex justify-center">
-        <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 text-3xl">
-          📸
-        </div>
-      </div>
+    <p class="text-sm font-medium tracking-wide text-zinc-600/80">
+      사진모아
+    </p>
 
-      <h1 class="mt-6 text-center text-2xl font-bold text-gray-900">
-        노희석 ❤️ 이지은
-      </h1>
-
-      <p class="mt-2 text-center text-sm text-gray-500">
-        2026.04.25 Wedding
-      </p>
-
-      <p class="mt-6 text-center text-base leading-7 text-gray-700">
-        오늘의 소중한 순간을 함께 남겨주세요.
-        <br />
-        사진 업로드와 사진 보기를 쉽게 이용할 수 있어요.
-      </p>
-
-      <div class="mt-8 space-y-3">
-        <RouterLink :to="`/e/${eventCode}/upload`"
-          class="block w-full rounded-2xl bg-gray-900 px-4 py-4 text-center text-base font-semibold text-white transition active:scale-[0.99]">
-          사진 올리기
-        </RouterLink>
-
-        <RouterLink :to="`/e/${eventCode}/access`"
-          class="block w-full rounded-2xl border border-gray-300 bg-white px-4 py-4 text-center text-base font-semibold text-gray-900 transition active:scale-[0.99]">
-          사진 보기
-        </RouterLink>
-      </div>
-
-      <div class="mt-8 rounded-2xl bg-gray-50 p-4">
-        <p class="text-sm font-semibold text-gray-800">
-          이용 안내
-        </p>
-        <ul class="mt-2 space-y-1 text-sm leading-6 text-gray-600">
-          <li>사진 업로드는 로그인 없이 가능합니다.</li>
-          <li>사진 보기는 비밀번호 입력 후 이용할 수 있습니다.</li>
-          <li>여러 장의 사진도 한 번에 업로드할 수 있습니다.</li>
-        </ul>
-      </div>
+    <div class="mt-8 flex flex-col items-center">
+      <div class="text-4xl text-zinc-900">📸</div>
     </div>
-  </section>
+
+    <h1 class="mt-8 font-serif text-[28px] font-medium leading-snug tracking-normal text-zinc-950">
+      노희석 ❤️ 이지은
+    </h1>
+
+    <p class="mt-4 text-base font-semibold text-zinc-800">
+      2026.04.25 Wedding
+    </p>
+
+    <p class="mt-7 text-center text-base leading-relaxed text-zinc-700/90">
+      오늘의 소중한 순간을 함께 남겨주세요.
+      <br />
+      사진 업로드와 사진 보기를 쉽게 이용할 수 있어요.
+    </p>
+
+    <div class="relative z-10 mt-12 flex w-full flex-col gap-4">
+      <RouterLink v-slot="{ navigate }" :to="`/e/${eventCode}/upload`" custom>
+        <button type="button"
+          class="w-full rounded-2xl bg-zinc-950 py-5 text-xl font-bold tracking-wide text-white shadow-xl transition-all duration-300 hover:bg-zinc-800 active:scale-[0.98]"
+          @click="navigate">
+          사진 올리기
+        </button>
+      </RouterLink>
+
+      <RouterLink v-slot="{ navigate }" :to="`/e/${eventCode}/access`" custom>
+        <button type="button"
+          class="w-full rounded-2xl border-2 border-zinc-200 bg-white py-5 text-xl font-bold tracking-wide text-zinc-950 shadow-lg transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
+          @click="navigate">
+          사진 보기
+        </button>
+      </RouterLink>
+    </div>
+
+    <div class="relative z-10 mt-10 w-full text-center">
+      <p class="text-sm font-semibold tracking-wide text-zinc-800">이용 안내</p>
+      <ul class="mt-2.5 space-y-1.5 text-sm font-medium leading-relaxed text-zinc-600/90">
+        <li>사진 업로드는 로그인 없이 가능합니다.</li>
+        <li>사진 보기는 비밀번호 입력 후 이용할 수 있습니다.</li>
+        <li>여러 장의 사진도 한 번에 업로드할 수 있습니다.</li>
+      </ul>
+    </div>
+
+  </div>
 </template>
 
 <script setup lang="ts">
