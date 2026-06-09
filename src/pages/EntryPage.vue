@@ -1,67 +1,86 @@
 <template>
-  <div
-    class="relative flex w-full max-w-[400px] flex-col items-center overflow-hidden rounded-[40px] bg-white p-12 shadow-2xl shadow-zinc-200/50">
+  <main class="min-h-screen bg-white px-6">
+    <div class="mx-auto flex min-h-screen max-w-md flex-col justify-center">
 
-    <p class="text-sm font-medium tracking-wide text-zinc-600/80">
-      사진모아
-    </p>
+      <div class="text-center">
+        <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-zinc-100 text-4xl">
+          📸
+        </div>
 
-    <div class="mt-8 flex flex-col items-center">
-      <div class="text-4xl text-zinc-900">📸</div>
-    </div>
+        <p class="mt-6 text-sm font-semibold tracking-[0.3em] text-zinc-400">
+          사진모아
+        </p>
 
-    <h1 class="mt-8 font-serif text-[28px] font-medium leading-snug tracking-normal text-zinc-950">
-      노희석 ❤️ 이지은
-    </h1>
+        <h1 class="mt-4 text-4xl font-bold leading-tight text-zinc-950">
+          소중한 순간을<br />
+          함께 모아보세요
+        </h1>
 
-    <p class="mt-4 text-base font-semibold text-zinc-800">
-      2026.04.25 Wedding
-    </p>
+        <p class="mt-5 text-base leading-relaxed text-zinc-600">
+          사진을 올리고, 함께 보고,<br />
+          추억을 하나의 앨범으로 간직하세요.
+        </p>
+      </div>
 
-    <p class="mt-7 text-center text-base leading-relaxed text-zinc-700/90">
-      오늘의 소중한 순간을 함께 남겨주세요.
-      <br />
-      사진 업로드와 사진 보기를 쉽게 이용할 수 있어요.
-    </p>
-
-    <div class="relative z-10 mt-12 flex w-full flex-col gap-4">
-      <RouterLink v-slot="{ navigate }" :to="`/e/${eventCode}/upload`" custom>
-        <button type="button"
-          class="w-full rounded-2xl bg-zinc-950 py-5 text-xl font-bold tracking-wide text-white shadow-xl transition-all duration-300 hover:bg-zinc-800 active:scale-[0.98]"
-          @click="navigate">
-          사진 올리기
+      <div class="mt-14 flex flex-col gap-3">
+        <button class="login-btn bg-zinc-950 text-white">
+          <span>✉️</span>
+          이메일로 계속하기
         </button>
-      </RouterLink>
 
-      <RouterLink v-slot="{ navigate }" :to="`/e/${eventCode}/access`" custom>
-        <button type="button"
-          class="w-full rounded-2xl border-2 border-zinc-200 bg-white py-5 text-xl font-bold tracking-wide text-zinc-950 shadow-lg transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.98]"
-          @click="navigate">
-          사진 보기
+        <button class="login-btn border border-zinc-200 bg-white text-zinc-900">
+          <span class="font-bold text-red-500">G</span>
+          Google로 계속하기
         </button>
-      </RouterLink>
-    </div>
 
-    <div class="relative z-10 mt-10 w-full text-center">
-      <p class="text-sm font-semibold tracking-wide text-zinc-800">이용 안내</p>
-      <ul class="mt-2.5 space-y-1.5 text-sm font-medium leading-relaxed text-zinc-600/90">
-        <li>사진 업로드는 로그인 없이 가능합니다.</li>
-        <li>사진 보기는 비밀번호 입력 후 이용할 수 있습니다.</li>
-        <li>여러 장의 사진도 한 번에 업로드할 수 있습니다.</li>
-      </ul>
-    </div>
+        <button class="login-btn border border-zinc-200 bg-white text-zinc-900">
+          <span class="text-xl"></span>
+          Apple로 계속하기
+        </button>
 
-  </div>
+        <button class="login-btn bg-[#FEE500] text-zinc-950">
+          <span>💬</span>
+          카카오톡으로 계속하기
+        </button>
+
+        <button class="login-btn bg-[#06C755] text-white">
+          <span class="font-bold">LINE</span>
+          LINE으로 계속하기
+        </button>
+
+        <button class="login-btn bg-[#1877F2] text-white">
+          <span class="font-bold">f</span>
+          Facebook으로 계속하기
+        </button>
+      </div>
+
+      <p class="mt-8 text-center text-xs leading-relaxed text-zinc-400">
+        로그인하면 사진 업로드와 앨범 보기를 더 편하게 이용할 수 있어요.
+      </p>
+
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-
-const eventCode = computed(() => {
-  const value = route.params.eventCode
-  return typeof value === 'string' ? value : 'sample-event'
-})
 </script>
+
+<style scoped>
+.login-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 18px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(24, 24, 27, 0.06);
+  transition: all 0.2s ease;
+}
+
+.login-btn:active {
+  transform: scale(0.98);
+}
+</style>
