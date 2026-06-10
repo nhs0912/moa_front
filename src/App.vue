@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-// 사용하지 않는 bgImage와 스타일은 깔끔하게 삭제했습니다!
+
 </script>
 
 <!-- <template> -->

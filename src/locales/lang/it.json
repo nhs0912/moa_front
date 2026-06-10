@@ -1,0 +1,21 @@
+{
+  "mainTitle": "Sajin MoA",
+  "title": "Raccogliete I Vostri\nMomenti Più Preziosi",
+  "emailContinue": "Continua con l'e-mail",
+  "googleContinue": "Continua con Google",
+  "appleContinue": "Continua con Apple",
+  "kakaoContinue": "Continua con Kakao",
+  "lineContinue": "Continua con LINE",
+  "facebookContinue": "Continua con Facebook",
+  "backToSns": "Torna al login social",
+  "login": "Accedi",
+  "signup": "Registrati",
+  "emailLabel": "Indirizzo e-mail",
+  "passwordLabel": "Password",
+  "passwordConfirmLabel": "Conferma password",
+  "passwordPlaceholder": "Inserisci la tua password",
+  "passwordConfirmPlaceholder": "Inserisci di nuovo la password",
+  "loginBtn": "Accedi",
+  "signupBtn": "Completa la registrazione",
+  "footer": "Raccogli i tuoi momenti preziosi con Sajin MoA !\nCarica e condividi le foto facilmente, sempre e ovunque. Inizia subito !"
+}

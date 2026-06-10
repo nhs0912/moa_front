@@ -1,0 +1,21 @@
+{
+  "mainTitle": "Sajin MoA",
+  "title": "รวบรวมช่วงเวลาล้ำค่า\nไว้ด้วยกัน",
+  "emailContinue": "ดำเนินการต่อด้วยอีเมล",
+  "googleContinue": "ดำเนินการต่อด้วย Google",
+  "appleContinue": "ดำเนินการต่อด้วย Apple",
+  "kakaoContinue": "ดำเนินการต่อด้วย Kakao",
+  "lineContinue": "ดำเนินการต่อด้วย LINE",
+  "facebookContinue": "ดำเนินการต่อด้วย Facebook",
+  "backToSns": "กลับไปยังหน้าเข้าสู่ระบบ",
+  "login": "เข้าสู่ระบบ",
+  "signup": "สมัครสมาชิก",
+  "emailLabel": "ที่อยู่อีเมล",
+  "passwordLabel": "รหัสผ่าน",
+  "passwordConfirmLabel": "ยืนยันรหัสผ่าน",
+  "passwordPlaceholder": "กรุณากรอกรหัสผ่านของคุณ",
+  "passwordConfirmPlaceholder": "กรุณากรอกรหัสผ่านอีกครั้ง",
+  "loginBtn": "เข้าสู่ระบบ",
+  "signupBtn": "ลงทะเบียนเสร็จสิ้น",
+  "footer": "รวบรวมช่วงเวลาดี ๆ ของคุณด้วย Sajin MoA!\nอัปโหลดและแชร์รูปภาพได้อย่างง่ายดายทุกที่ทุกเวลา เริ่มต้นใช้งานได้ทันที!"
+}

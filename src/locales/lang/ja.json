@@ -1,0 +1,21 @@
+{
+  "mainTitle": "Sajin MoA",
+  "title": "大切な瞬間を\nみんなで集めましょう",
+  "emailContinue": "メールアドレスで続ける",
+  "googleContinue": "Googleで続ける",
+  "appleContinue": "Appleで続ける",
+  "kakaoContinue": "KakaoTalkで続ける",
+  "lineContinue": "LINEで続ける",
+  "facebookContinue": "Facebookで続ける",
+  "backToSns": "ソーシャルログインに戻る",
+  "login": "ログイン",
+  "signup": "新規登録",
+  "emailLabel": "メールアドレス",
+  "passwordLabel": "パスワード",
+  "passwordConfirmLabel": "パスワードの再確認",
+  "passwordPlaceholder": "パスワードを入力してください",
+  "passwordConfirmPlaceholder": "パスワードをもう一度入力してください",
+  "loginBtn": "ログインする",
+  "signupBtn": "登録を完了する",
+  "footer": "Sajin MoAで大切な思い出を集めましょう！\nいつでもどこでも簡単に写真をアップロードして共有できます。今すぐ始めましょう！"
+}

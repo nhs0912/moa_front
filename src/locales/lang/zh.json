@@ -1,0 +1,21 @@
+{
+  "mainTitle": "Sajin MoA",
+  "title": "凝聚珍贵瞬间\n留住美好回忆",
+  "emailContinue": "使用电子邮箱继续",
+  "googleContinue": "使用 Google 账号继续",
+  "appleContinue": "使用 Apple 账号继续",
+  "kakaoContinue": "使用 KakaoTalk 继续",
+  "lineContinue": "使用 LINE 继续",
+  "facebookContinue": "使用 Facebook 继续",
+  "backToSns": "返回第三方登录",
+  "login": "登录",
+  "signup": "注册",
+  "emailLabel": "电子邮箱地址",
+  "passwordLabel": "密码",
+  "passwordConfirmLabel": "确认密码",
+  "passwordPlaceholder": "请输入密码",
+  "passwordConfirmPlaceholder": "请再次输入密码",
+  "loginBtn": "登录账户",
+  "signupBtn": "完成注册",
+  "footer": "与 Sajin MoA 一起珍藏您的宝贵瞬间！\n随时随地轻松上传和分享照片。立即开启您的相册吧！"
+}

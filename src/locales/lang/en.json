@@ -1,0 +1,21 @@
+{
+  "mainTitle": "Sajin MoA",
+  "title": "Collect Precious\nMoments Together",
+  "emailContinue": "Continue with Email",
+  "googleContinue": "Continue with Google",
+  "appleContinue": "Continue with Apple",
+  "kakaoContinue": "Continue with Kakao",
+  "lineContinue": "Continue with LINE",
+  "facebookContinue": "Continue with Facebook",
+  "backToSns": "Back to Social Login",
+  "login": "Sign In",
+  "signup": "Sign Up",
+  "emailLabel": "Email Address",
+  "passwordLabel": "Password",
+  "passwordConfirmLabel": "Confirm Password",
+  "passwordPlaceholder": "Enter your password",
+  "passwordConfirmPlaceholder": "Enter your password again",
+  "loginBtn": "Log In",
+  "signupBtn": "Complete Sign Up",
+  "footer": "Collect your precious moments with SajinMoa!\nUpload and share photos easily anytime, anywhere. \nGet started right now!"
+}

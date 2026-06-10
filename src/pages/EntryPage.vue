@@ -1,15 +1,43 @@
 <template>
   <main class="min-h-screen bg-white px-6 relative">
 
-    <div class="absolute top-6 right-6 flex gap-2 z-50">
-      <button @click="changeLocale('ko')"
-        :class="['text-xs font-bold px-2.5 py-1 rounded-md transition-all', locale === 'ko' ? 'bg-zinc-950 text-white' : 'bg-zinc-100 text-zinc-400']">
-        KR
+    <div v-if="currentMode !== 'production'"
+      class="absolute top-6 left-6 z-50 flex items-center gap-1.5 font-mono text-[10px] font-bold select-none px-2 py-0.5 rounded-md bg-zinc-100/80 backdrop-blur-sm"
+      :class="modeStyle.text">
+      <span class="h-1 w-1 rounded-full animate-pulse" :class="modeStyle.dot"></span>
+      <span>{{ modeStyle.label }} v0.0.1</span>
+    </div>
+
+    <div class="absolute top-6 right-6 z-50" ref="dropdownRef">
+      <button @click="isDropdownOpen = !isDropdownOpen"
+        class="flex items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-bold text-zinc-700 shadow-sm transition-all hover:bg-zinc-50 active:scale-95 cursor-pointer">
+        <span>🌐</span>
+        <span class="tracking-tight text-zinc-800">{{ currentLanguageLabel }}</span>
+        <span class="text-[9px] text-zinc-400 transition-transform duration-200"
+          :class="{ 'rotate-180': isDropdownOpen }">▼</span>
       </button>
-      <button @click="changeLocale('en')"
-        :class="['text-xs font-bold px-2.5 py-1 rounded-md transition-all', locale === 'en' ? 'bg-zinc-950 text-white' : 'bg-zinc-100 text-zinc-400']">
-        EN
-      </button>
+
+      <Transition name="dropdown">
+        <div v-if="isDropdownOpen"
+          class="absolute right-0 mt-2 w-40 origin-top-right rounded-xl border border-zinc-100 bg-white p-1.5 shadow-xl ring-1 ring-zinc-950/5">
+          <button v-for="lang in supportLanguages" :key="lang.code" @click="changeLocale(lang.code)" :class="[
+            'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm font-medium transition-colors cursor-pointer gap-2',
+            locale === lang.code ? 'bg-zinc-950 text-white' : 'text-zinc-700 hover:bg-zinc-50'
+          ]">
+            <div class="flex items-center gap-1">
+              <span v-if="locale === lang.code" class="text-xs">✓</span>
+              <span :class="{ 'pl-3.5': locale !== lang.code }">{{ lang.label }}</span>
+            </div>
+
+            <span :class="[
+              'text-[10px] font-mono font-bold tracking-wider rounded px-1 py-0.5',
+              locale === lang.code ? 'text-zinc-400 bg-zinc-900' : 'text-zinc-400 bg-zinc-100'
+            ]">
+              {{ lang.native }}
+            </span>
+          </button>
+        </div>
+      </Transition>
     </div>
 
     <div class="mx-auto flex min-h-dvh max-w-md flex-col justify-center py-10">
@@ -104,18 +132,62 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// useI18n에서 t 함수와 locale 상태를 받아옵니다.
+// 1. 빌드 환경 분기 스크립트 로직
+const currentMode = import.meta.env.MODE
+const modeStyle = computed(() => {
+  if (currentMode === 'development') {
+    return { label: 'DEV', text: 'text-amber-600', dot: 'bg-amber-500' }
+  }
+  return { label: 'STG', text: 'text-blue-600', dot: 'bg-blue-500' }
+})
+
+// 2. 다국어 제어 Hooks 호출
 const { t, locale } = useI18n()
 
+// 3. 지구본 토글 및 다국어 서포트 모델 관리
+const isDropdownOpen = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
+
+const supportLanguages = [
+  { code: 'ko', label: '한국어', native: 'KO' },
+  { code: 'en', label: 'English', native: 'EN' },
+  { code: 'es', label: 'Español', native: 'ES' },
+  { code: 'ja', label: '日本語', native: 'JA' },
+  { code: 'zh', label: '中文', native: 'ZH' },
+  { code: 'fr', label: 'Français', native: 'FR' }, // 프랑스어 추가
+  { code: 'it', label: 'Italiano', native: 'IT' }, // 이탈리아어 추가
+  { code: 'th', label: 'ภาษาไทย', native: 'TH' },  // 태국어 추가
+  { code: 'vi', label: 'Tiếng Việt', native: 'VI' } // 베트남어 추가
+
+]
+
+// 💡 현재 선택된 locale 코드(예: 'ko')에 대응하는 풀 네임(예: '한국어')을 실시간으로 가져오는 computed 속성
+const currentLanguageLabel = computed(() => {
+  const current = supportLanguages.find(lang => lang.code === locale.value)
+  return current ? current.label : locale.value
+})
+
+const changeLocale = (lang: string) => {
+  locale.value = lang
+  isDropdownOpen.value = false
+}
+
+// 빈 바탕화면 클릭 처리 바인딩 핸들러
+const handleClickOutside = (event: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+    isDropdownOpen.value = false
+  }
+}
+
+onMounted(() => window.addEventListener('click', handleClickOutside))
+onUnmounted(() => window.removeEventListener('click', handleClickOutside))
+
+// 4. 컴포넌트 폼 내부 반응형 구조체 상태 변수
 const currentView = ref<'sns' | 'email'>('sns')
 const emailMode = ref<'login' | 'signup'>('login')
-
-const changeLocale = (lang: 'ko' | 'en') => {
-  locale.value = lang
-}
 
 const handleSubmit = () => {
   if (emailMode.value === 'login') {
@@ -164,6 +236,7 @@ const handleSubmit = () => {
   outline: none;
 }
 
+/* 폼 스위칭 인터랙션 효과 */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;
@@ -177,5 +250,21 @@ const handleSubmit = () => {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+/* 지구본 드롭다운 패널 인터랙션 효과 */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-enter-from {
+  opacity: 0;
+  transform: scale(0.95) translateY(-5px);
+}
+
+.dropdown-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(-5px);
 }
 </style>
