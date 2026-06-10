@@ -1,5 +1,9 @@
 <template>
-  <main class="min-h-screen bg-white px-6 relative">
+  <!-- <main class="min-h-dvh w-full max-w-md md:max-w-xl p-6 sm:p-8 mx-auto bg-white rounded-2xl shadow-sm"> -->
+  <main class="relative mx-auto flex min-h-100dvh w-full max-w-md flex-col justify-between overflow-hidden bg-white px-6 py-8
+         sm:max-w-lg sm:px-8
+         md:max-w-xl md:px-10 md:py-10
+         lg:32px lg:shadow-2xl">
 
     <div v-if="currentMode !== 'production'"
       class="absolute top-6 left-6 z-50 flex items-center gap-1.5 font-mono text-[10px] font-bold select-none px-2 py-0.5 rounded-md bg-zinc-100/80 backdrop-blur-sm"
@@ -52,7 +56,7 @@
         </h1>
       </div>
 
-      <div class="mt-12 min-h-h-105">
+      <div class="mt-2 min-h-h-105">
         <Transition name="fade-slide" mode="out-in">
 
           <div v-if="currentView === 'sns'" key="sns" class="flex flex-col gap-3">
@@ -72,13 +76,13 @@
               <span>💬</span> {{ t('kakaoContinue') }}
             </button>
 
-            <button class="login-btn bg-[#06C755] text-white">
+            <!-- <button class="login-btn bg-[#06C755] text-white">
               <span class="font-bold text-xs">LINE</span> {{ t('lineContinue') }}
             </button>
 
             <button class="login-btn bg-[#1877F2] text-white">
               <span class="font-bold">f</span> {{ t('facebookContinue') }}
-            </button>
+            </button> -->
           </div>
 
           <div v-else-if="currentView === 'email'" key="email" class="flex flex-col">

@@ -1,15 +1,15 @@
 import { createI18n } from "vue-i18n";
 
 // 분리한 JSON 파일들을 import 합니다.
-import ko from "./lang/ko.json";
-import en from "./lang/en.json";
-import ja from "./lang/ja.json";
-import zh from "./lang/zh.json";
-import es from "./lang/es.json";
-import fr from "./lang/fr.json";
-import it from "./lang/it.json";
-import th from "./lang/th.json";
-import vi from "./lang/vi.json";
+import ko from "./lang/ko/common.json";
+import en from "./lang/en/common.json";
+import ja from "./lang/ja/common.json";
+import zh from "./lang/zh/common.json";
+import es from "./lang/es/common.json";
+import fr from "./lang/fr/common.json";
+import it from "./lang/it/common.json";
+import th from "./lang/th/common.json";
+import vi from "./lang/vi/common.json";
 
 // 지원 언어 리스트
 const SUPPORT_LANGUAGES = ["ko", "en", "ja", "zh", "es", "fr", "it", "th", "vi"];
