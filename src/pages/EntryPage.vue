@@ -154,6 +154,19 @@ const { t, locale } = useI18n()
 // 3. 지구본 토글 및 다국어 서포트 모델 관리
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+// 이메일 로그인/회원가입 폼 제어 상태 변수
+const emailInput = ref('')
+const passwordInput = ref('')
+const passwordConfirmInput = ref('')
+
+// 비밀번호 불일치 여부를 실시간으로 계산하는 computed 속성
+const isPasswordMisMatch = computed(() => {
+  if (emailMode.value !== 'signup' || !passwordConfirmInput.value) {
+    return false; // 회원가입 모드가 아닐 때는 불일치 여부 계산 안 함
+  }
+  return passwordInput.value !== passwordConfirmInput.value
+})
+
 
 const supportLanguages = [
   { code: 'ko', label: '한국어', native: 'KO' },
