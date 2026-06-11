@@ -17,5 +17,7 @@
   "passwordConfirmPlaceholder": "Introduce tu contraseña de nuevo",
   "loginBtn": "Iniciar sesión",
   "signupBtn": "Completar registro",
-  "footer": "¡Reúne tus momentos más valiosos con Sajin MoA!\nSube y comparte fotos fácilmente en cualquier momento y lugar. ¡Empieza ahora mismo!"
+  "footer": "¡Reúne tus momentos más valiosos con Sajin MoA!\nSube y comparte fotos fácilmente en cualquier momento y lugar. ¡Empieza ahora mismo!",
+  "passwordMismatchError": "Las contraseñas no coinciden.",
+  "emailPlaceholder": "Por favor, introduce tu correo electrónico"
 }

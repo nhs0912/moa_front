@@ -17,5 +17,7 @@
   "passwordConfirmPlaceholder": "请再次输入密码",
   "loginBtn": "登录账户",
   "signupBtn": "完成注册",
-  "footer": "与 Sajin MoA 一起珍藏您的宝贵瞬间！\n随时随地轻松上传和分享照片。立即开启您的相册吧！"
+  "footer": "与 Sajin MoA 一起珍藏您的宝贵瞬间！\n随时随地轻松上传和分享照片。立即开启您的相册吧！",
+  "passwordMismatchError": "两次输入的密码不匹配。",
+  "emailPlaceholder": "请输入您的电子邮箱"
 }

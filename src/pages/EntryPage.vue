@@ -105,20 +105,29 @@
             <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-zinc-500 pl-1">{{ t('emailLabel') }}</label>
-                <input type="email" placeholder="example@moa.com" class="input-field" required />
+                <input type="email" v-model="emailInput" :placeholder="t('emailPlaceholder')" class="input-field"
+                  required />
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-zinc-500 pl-1">{{ t('passwordLabel') }}</label>
-                <input type="password" :placeholder="t('passwordPlaceholder')" class="input-field" required />
+                <input type="password" v-model="passwordInput" :placeholder="t('passwordPlaceholder')"
+                  :class="['input-field', isPasswordMisMatch ? '!border-red-500 !text-red-500 !bg-red-50/50 !focus:border-red-500' : isPasswordMatch ? '!border-emerald-500 !text-emerald-500 !bg-emerald-50/50 !focus:border-emerald-500' : '!text-zinc-500']"
+                  required />
               </div>
 
               <div v-if="emailMode === 'signup'" class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-zinc-500 pl-1">{{ t('passwordConfirmLabel') }}</label>
-                <input type="password" :placeholder="t('passwordConfirmPlaceholder')" class="input-field" required />
+                <input type="password" v-model="passwordConfirmInput" :placeholder="t('passwordConfirmPlaceholder')"
+                  :class="['input-field', isPasswordMisMatch ? '!border-red-500 !text-red-500 !bg-red-50/50 !focus:border-red-500' : isPasswordMatch ? '!border-emerald-500 !text-emerald-500 !bg-emerald-50/50 !focus:border-emerald-500' : '!text-zinc-500']"
+                  required />
               </div>
+              <p v-if="isPasswordMisMatch" class="pl-1 text-sm font-bold text-red-500">
+                {{ t('passwordMismatchError') }}
+              </p>
 
-              <button type="submit" class="login-btn bg-zinc-950 text-white mt-4">
+              <button type="submit" :disabled="isPasswordMisMatch"
+                :class="['login-btn mt-4 transition-colors', isPasswordMisMatch ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed' : 'bg-zinc-950 text-white']">
                 {{ emailMode === 'login' ? t('loginBtn') : t('signupBtn') }}
               </button>
             </form>
@@ -167,6 +176,15 @@ const isPasswordMisMatch = computed(() => {
   return passwordInput.value !== passwordConfirmInput.value
 })
 
+const isPasswordMatch = computed(() => {
+  //가입모드가 아니거나, 둘 주 ㅇ하나라도 비어있으면 초록색을 띄우지 않음
+  if (emailMode.value !== 'signup' || !passwordInput.value || !passwordConfirmInput.value) {
+    return false
+  }
+  //두 값이 동일하면 true(초록색))
+  return passwordInput.value === passwordConfirmInput.value
+})
+
 
 const supportLanguages = [
   { code: 'ko', label: '한국어', native: 'KO' },
@@ -207,12 +225,17 @@ const currentView = ref<'sns' | 'email'>('sns')
 const emailMode = ref<'login' | 'signup'>('login')
 
 const handleSubmit = () => {
+  if (emailMode.value === 'signup' && isPasswordMisMatch.value) {
+    alert(t('passwordMismatchError'))
+    return
+  }
   if (emailMode.value === 'login') {
     alert(t('loginBtn'))
   } else {
     alert(t('signupBtn'))
   }
 }
+
 </script>
 
 <style scoped>

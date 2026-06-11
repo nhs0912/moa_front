@@ -17,5 +17,7 @@
   "passwordConfirmPlaceholder": "Enter your password again",
   "loginBtn": "Log In",
   "signupBtn": "Complete Sign Up",
-  "footer": "Collect your precious moments with SajinMoa!\nUpload and share photos easily anytime, anywhere. \nGet started right now!"
+  "footer": "Collect your precious moments with SajinMoa!\nUpload and share photos easily anytime, anywhere. \nGet started right now!",
+  "passwordMismatchError": "Passwords do not match.",
+  "emailPlaceholder": "Please enter your email"
 }

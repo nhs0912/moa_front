@@ -17,5 +17,7 @@
   "passwordConfirmPlaceholder": "パスワードをもう一度入力してください",
   "loginBtn": "ログインする",
   "signupBtn": "登録を完了する",
-  "footer": "Sajin MoAで大切な思い出を集めましょう！\nいつでもどこでも簡単に写真をアップロードして共有できます。今すぐ始めましょう！"
+  "footer": "Sajin MoAで大切な思い出を集めましょう！\nいつでもどこでも簡単に写真をアップロードして共有できます。今すぐ始めましょう！",
+  "passwordMismatchError": "パスワードが一致しません。",
+  "emailPlaceholder": "メールアドレスを入力してください"
 }

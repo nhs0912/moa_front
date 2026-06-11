@@ -17,5 +17,7 @@
   "passwordConfirmPlaceholder": "Inserisci di nuovo la password",
   "loginBtn": "Accedi",
   "signupBtn": "Completa la registrazione",
-  "footer": "Raccogli i tuoi momenti preziosi con Sajin MoA !\nCarica e condividi le foto facilmente, sempre e ovunque. Inizia subito !"
+  "footer": "Raccogli i tuoi momenti preziosi con Sajin MoA !\nCarica e condividi le foto facilmente, sempre e ovunque. Inizia subito !",
+  "passwordMismatchError": "Le password non corrispondono.",
+  "emailPlaceholder": "Per favore, inserisci la tua email"
 }
