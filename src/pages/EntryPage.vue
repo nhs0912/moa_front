@@ -259,6 +259,11 @@ const handleSubmit = async () => {
         password: passwordInput.value
       })
       console.log('Signup successful', result)
+      alert(t('signupSuccess'));
+      emailMode.value = 'login'
+      passwordInput.value = ''
+      passwordConfirmInput.value = ''
+      //TODO :
     }
   } catch (error) {
     console.error('Authentication error:', error)

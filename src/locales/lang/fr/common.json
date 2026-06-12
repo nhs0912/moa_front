@@ -19,5 +19,7 @@
   "signupBtn": "Terminer l'inscription",
   "footer": "Rassemblez vos précieux souvenirs avec Sajin MoA !\nTéléchargez et partagez des photos facilement, n'importe où, n'importe quand. Commencez dès maintenant !",
   "passwordMismatchError": "Les mots de passe ne correspondent pas.",
-  "emailPlaceholder": "Veuillez entrer votre e-mail"
+  "emailPlaceholder": "Veuillez entrer votre e-mail",
+  "authError": "Une erreur s'est produite lors de l'authentification. Veuillez réessayer.",
+  "signupSuccess": "Inscription terminée avec succès ! Veuillez vous connecter pour continuer."
 }
