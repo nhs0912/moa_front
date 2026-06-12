@@ -104,10 +104,32 @@
 
             <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
               <div class="flex flex-col gap-1.5">
+                <label :class="[
+                  'pl-1 text-xs font-semibold transition-colors',
+                  emailMode === 'signup' && isEmailAvailable === false ? 'text-red-500' :
+                    emailMode === 'signup' && isEmailAvailable === true ? 'text-emerald-500' : 'text-zinc-500'
+                ]">
+                  {{ t('emailLabel') }}
+                </label>
+
+                <input type="email" v-model="emailInput" @blur="handleEmailBlur"
+                  :placeholder="t('emailPlaceholder') || 'id@moa.com'" :class="[
+                    'input-field transition-colors',
+                    emailMode === 'signup' && isEmailAvailable === false ? '!border-red-500 !bg-red-50/50 !text-red-500 focus:!border-red-500' :
+                      emailMode === 'signup' && isEmailAvailable === true ? '!border-emerald-500 !bg-emerald-50/50 !text-emerald-600 focus:!border-emerald-500' : '!text-zinc-950'
+                  ]" required />
+
+                <p v-if="emailMode === 'signup' && isEmailAvailable !== null"
+                  :class="['pl-1 text-sm font-bold', isEmailAvailable ? 'text-emerald-500' : 'text-red-500']">
+                  {{ emailErrorMessage }}
+                </p>
+              </div>
+
+              <!-- <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-zinc-500 pl-1">{{ t('emailLabel') }}</label>
                 <input type="email" v-model="emailInput" :placeholder="t('emailPlaceholder')" class="input-field"
                   required />
-              </div>
+              </div> -->
               <!-- <div class="flex flex-col gap-1.5">
                 <button type="submit" :disabled="isPasswordMisMatch || isSubmitting" :class="[
                   'login-btn mt-4 transition-colors',
@@ -155,9 +177,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { login, signup } from '@/api/auth'
+import { login, signup, checkEmailExists } from '@/api/auth'
 
 
 // 1. 빌드 환경 분기 스크립트 로직
@@ -273,6 +295,43 @@ const handleSubmit = async () => {
     isSubmitting.value = false
   }
 }
+
+const isEmailAvailable = ref<boolean | null>(null) // null: 아직 체크 안 함, true: 사용 가능, false: 이미 존재
+const emailErrorMessage = ref('')
+
+watch(emailInput, () => {
+  isEmailAvailable.value = null
+})
+
+const handleEmailBlur = async () => {
+  if (emailMode.value !== 'signup' || !emailInput.value) {
+    return
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(emailInput.value)) {
+    isEmailAvailable.value = false
+    emailErrorMessage.value = t('invalidEmailError')
+    return
+  }
+
+  try {
+    const response = await checkEmailExists(emailInput.value)
+    const isDuplicate = response.data.isDuplicate
+    if (isDuplicate) {
+      isEmailAvailable.value = false
+      emailErrorMessage.value = t('emailExistsError')
+    } else {
+      isEmailAvailable.value = true
+      emailErrorMessage.value = ''
+    }
+  } catch (error) {
+    console.error('Error checking email:', error)
+    isEmailAvailable.value = false
+    emailErrorMessage.value = t('emailCheckError')
+  }
+}
+
 
 </script>
 
