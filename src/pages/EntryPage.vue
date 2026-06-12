@@ -46,7 +46,7 @@
 
     <div class="mx-auto flex min-h-dvh max-w-md flex-col justify-center py-10">
 
-      <div class="text-center">
+      <div class="text-center ">
         <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-zinc-100 text-4xl">
           📸
         </div>
@@ -108,6 +108,16 @@
                 <input type="email" v-model="emailInput" :placeholder="t('emailPlaceholder')" class="input-field"
                   required />
               </div>
+              <!-- <div class="flex flex-col gap-1.5">
+                <button type="submit" :disabled="isPasswordMisMatch || isSubmitting" :class="[
+                  'login-btn mt-4 transition-colors',
+                  isPasswordMisMatch || isSubmitting
+                    ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed'
+                    : 'bg-zinc-950 text-white'
+                ]">
+                  {{ isSubmitting ? 'Loading...' : emailMode === 'login' ? t('loginBtn') : t('signupBtn') }}
+                </button>
+              </div> -->
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-semibold text-zinc-500 pl-1">{{ t('passwordLabel') }}</label>
@@ -147,6 +157,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { login, signup } from '@/api/auth'
+
 
 // 1. 빌드 환경 분기 스크립트 로직
 const currentMode = import.meta.env.MODE
@@ -224,15 +236,36 @@ onUnmounted(() => window.removeEventListener('click', handleClickOutside))
 const currentView = ref<'sns' | 'email'>('sns')
 const emailMode = ref<'login' | 'signup'>('login')
 
-const handleSubmit = () => {
+const isSubmitting = ref(false)
+
+const handleSubmit = async () => {
   if (emailMode.value === 'signup' && isPasswordMisMatch.value) {
     alert(t('passwordMismatchError'))
     return
   }
-  if (emailMode.value === 'login') {
-    alert(t('loginBtn'))
-  } else {
-    alert(t('signupBtn'))
+
+  try {
+    isSubmitting.value = true
+    if (emailMode.value === 'login') {
+      const result = await login({
+        loginId: emailInput.value,
+        password: passwordInput.value
+      })
+      console.log('Login successful:', result)
+      //TODO : save token to localStorage or cookie
+    } else {
+      const result = await signup({
+        loginId: emailInput.value,
+        password: passwordInput.value
+      })
+      console.log('Signup successful', result)
+    }
+  } catch (error) {
+    console.error('Authentication error:', error)
+    alert(t('authError'))
+    return
+  } finally {
+    isSubmitting.value = false
   }
 }
 
