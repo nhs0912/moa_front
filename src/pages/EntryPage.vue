@@ -174,31 +174,32 @@
 
     </div>
   </main>
-  <Transition name="toast">
+  <!-- <Transition name="toast">
     <div v-if="showToast"
       class="fixed bottom-10 left-1/2 z-100 flex w-max -translate-x-1/2 items-center gap-2 rounded-full bg-zinc-900 px-6 py-3.5 text-sm font-semibold text-white shadow-2xl">
       <span>✨</span>
       <span>{{ toastMessage }}</span>
     </div>
-  </Transition>
+  </Transition> -->
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { login, signup, checkEmailExists } from '@/api/auth'
-// script 영역에 추가
-const showToast = ref(false)
-const toastMessage = ref('')
+import { showToast, showConfirm, showAlert } from '@/utils/alert'
+// // script 영역에 추가
+// const showToast = ref(false)
+// const toastMessage = ref('')
 
-// 알림창을 3초간 띄워주는 함수
-const triggerToast = (message: string) => {
-  toastMessage.value = message
-  showToast.value = true
-  setTimeout(() => {
-    showToast.value = false
-  }, 3000)
-}
+// // 알림창을 3초간 띄워주는 함수
+// const triggerToast = (message: string) => {
+//   toastMessage.value = message
+//   showToast.value = true
+//   setTimeout(() => {
+//     showToast.value = false
+//   }, 3000)
+// }
 
 // 1. 빌드 환경 분기 스크립트 로직
 const currentMode = import.meta.env.MODE
@@ -280,7 +281,7 @@ const isSubmitting = ref(false)
 
 const handleSubmit = async () => {
   if (emailMode.value === 'signup' && isPasswordMisMatch.value) {
-    alert(t('passwordMismatchError'))
+    showToast(t('passwordMismatchError'), 'error')
     return
   }
 
@@ -292,7 +293,7 @@ const handleSubmit = async () => {
         password: passwordInput.value
       })
       console.log('Login successful:', result)
-      triggerToast(t('loginSuccess'))
+      showToast(t('loginSuccess'), 'success')
       //TODO : save token to localStorage or cookie
     } else {
       const result = await signup({
@@ -301,7 +302,7 @@ const handleSubmit = async () => {
       })
       console.log('Signup successful', result)
       // alert(t('signupSuccess'));
-      triggerToast(t('signupSuccess'))
+      showToast(t('signupSuccess'), 'success')
       emailMode.value = 'login'
       passwordInput.value = ''
       passwordConfirmInput.value = ''
@@ -309,7 +310,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error('Authentication error:', error)
-    triggerToast(t('authError'))
+    showToast(t('authError'), 'error')
     return
   } finally {
     isSubmitting.value = false
@@ -337,7 +338,7 @@ const handleEmailBlur = async () => {
 
   try {
     const response = await checkEmailExists(emailInput.value)
-    const isDuplicate = response.data
+    const isDuplicate = response.data.data.isExistEmail
     if (isDuplicate) {
       isEmailAvailable.value = false
       emailErrorMessage.value = t('emailExistsError')
@@ -426,7 +427,7 @@ const handleEmailBlur = async () => {
 }
 
 /* 토스트 팝업 애니메이션 */
-.toast-enter-active,
+/*.toast-enter-active,
 .toast-leave-active {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -435,5 +436,5 @@ const handleEmailBlur = async () => {
 .toast-leave-to {
   opacity: 0;
   transform: translate(-50%, 20px);
-}
+}*/
 </style>
