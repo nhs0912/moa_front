@@ -21,5 +21,8 @@
   "passwordMismatchError": "Mật khẩu không khớp.",
   "emailPlaceholder": "Vui lòng nhập email của bạn",
   "authError": "Đã xảy ra lỗi trong quá trình xác thực. Vui lòng thử lại.",
-  "signupSuccess": "Đăng ký thành công! Vui lòng đăng nhập để tiếp tục."
+  "signupSuccess": "Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.",
+  "invalidEmailError": "Địa chỉ email không hợp lệ.",
+  "emailExistsError": "Địa chỉ email đã tồn tại.",
+  "emailCheckError": "Vui lòng nhập định dạng email hợp lệ (ví dụ: test@moa.com)"
 }

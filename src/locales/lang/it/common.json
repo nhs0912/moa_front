@@ -21,5 +21,8 @@
   "passwordMismatchError": "Le password non corrispondono.",
   "emailPlaceholder": "Per favore, inserisci la tua email",
   "authError": "Si è verificato un errore durante l'autenticazione. Per favore, riprova.",
-  "signupSuccess": "Registrazione completata con successo! Per favore, accedi per continuare."
+  "signupSuccess": "Registrazione completata con successo! Per favore, accedi per continuare.",
+  "invalidEmailError": "L'indirizzo e-mail non è valido.",
+  "emailExistsError": "L'indirizzo e-mail esiste già.",
+  "emailCheckError": "Per favore, inserisci un formato di e-mail valido (es. test@moa.com)"
 }

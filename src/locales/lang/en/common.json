@@ -21,5 +21,8 @@
   "passwordMismatchError": "Passwords do not match.",
   "emailPlaceholder": "Please enter your email",
   "authError": "An error occurred during authentication. Please try again.",
-  "signupSuccess": "Sign up completed successfully! Please log in to continue."
+  "signupSuccess": "Sign up completed successfully! Please log in to continue.",
+  "invalidEmailError": "The email address is invalid.",
+  "emailExistsError": "The email address already exists.",
+  "emailCheckError": "Please enter a valid email format (e.g., test@moa.com)"
 }

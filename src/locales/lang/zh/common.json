@@ -21,5 +21,8 @@
   "passwordMismatchError": "两次输入的密码不匹配。",
   "emailPlaceholder": "请输入您的电子邮箱",
   "authError": "认证过程中发生了错误。请重新尝试。",
-  "signupSuccess": "注册成功！请登录以继续。"
+  "signupSuccess": "注册成功！请登录以继续。",
+  "invalidEmailError": "电子邮箱地址无效。",
+  "emailExistsError": "电子邮箱地址已存在。",
+  "emailCheckError": "请输入有效的电子邮箱格式（例如：test@moa.com）"
 }

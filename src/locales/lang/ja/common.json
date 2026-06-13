@@ -21,5 +21,8 @@
   "passwordMismatchError": "パスワードが一致しません。",
   "emailPlaceholder": "メールアドレスを入力してください",
   "authError": "認証中にエラーが発生しました。もう一度お試しください。",
-  "signupSuccess": "新規登録が完了しました！ログインして続行してください。"
+  "signupSuccess": "新規登録が完了しました！ログインして続行してください。",
+  "invalidEmailError": "メールアドレスが無効です。",
+  "emailExistsError": "メールアドレスは既に使用されています。",
+  "emailCheckError": "有効なメールアドレスの形式を入力してください（例：test@moa.com）"
 }

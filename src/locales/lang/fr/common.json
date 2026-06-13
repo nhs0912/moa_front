@@ -21,5 +21,8 @@
   "passwordMismatchError": "Les mots de passe ne correspondent pas.",
   "emailPlaceholder": "Veuillez entrer votre e-mail",
   "authError": "Une erreur s'est produite lors de l'authentification. Veuillez réessayer.",
-  "signupSuccess": "Inscription terminée avec succès ! Veuillez vous connecter pour continuer."
+  "signupSuccess": "Inscription terminée avec succès ! Veuillez vous connecter pour continuer.",
+  "invalidEmailError": "L'adresse e-mail n'est pas valide.",
+  "emailExistsError": "L'adresse e-mail existe déjà.",
+  "emailCheckError": "Veuillez entrer un format d'e-mail valide (par exemple, test@moa.com)"
 }
