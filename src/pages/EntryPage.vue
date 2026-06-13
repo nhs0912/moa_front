@@ -189,7 +189,7 @@ const isPasswordMisMatch = computed(() => {
 })
 
 const isPasswordMatch = computed(() => {
-  //가입모드가 아니거나, 둘 주 ㅇ하나라도 비어있으면 초록색을 띄우지 않음
+  //가입모드가 아니거나, 둘 중 하나라도 비어있으면 초록색을 띄우지 않음
   if (emailMode.value !== 'signup' || !passwordInput.value || !passwordConfirmInput.value) {
     return false
   }
