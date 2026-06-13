@@ -19,5 +19,7 @@
   "signupBtn": "登録を完了する",
   "footer": "Sajin MoAで大切な思い出を集めましょう！\nいつでもどこでも簡単に写真をアップロードして共有できます。今すぐ始めましょう！",
   "passwordMismatchError": "パスワードが一致しません。",
-  "emailPlaceholder": "メールアドレスを入力してください"
+  "emailPlaceholder": "メールアドレスを入力してください",
+  "authError": "認証中にエラーが発生しました。もう一度お試しください。",
+  "signupSuccess": "新規登録が完了しました！ログインして続行してください。"
 }

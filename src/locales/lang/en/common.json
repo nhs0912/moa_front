@@ -19,5 +19,7 @@
   "signupBtn": "Complete Sign Up",
   "footer": "Collect your precious moments with SajinMoa!\nUpload and share photos easily anytime, anywhere. \nGet started right now!",
   "passwordMismatchError": "Passwords do not match.",
-  "emailPlaceholder": "Please enter your email"
+  "emailPlaceholder": "Please enter your email",
+  "authError": "An error occurred during authentication. Please try again.",
+  "signupSuccess": "Sign up completed successfully! Please log in to continue."
 }
