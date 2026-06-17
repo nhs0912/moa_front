@@ -394,7 +394,7 @@ const handleEmailBlur = async () => {
   outline: none;
 }
 
-/* 폼 스위칭 인터랙션 효과 */
+/* 폼 스위칭 인터랙션 효과  */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.25s ease;
