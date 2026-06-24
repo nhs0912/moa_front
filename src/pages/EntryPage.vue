@@ -350,7 +350,7 @@ const handleEmailBlur = async () => {
 
   try {
     const response = await checkEmailExists(emailInput.value)
-    const isDuplicate = response.data.data.isExistEmail
+    const isDuplicate = response.isExistEmail
     if (isDuplicate) {
       isEmailAvailable.value = false
       emailErrorMessage.value = t('emailExistsError')
