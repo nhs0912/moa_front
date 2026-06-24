@@ -24,5 +24,6 @@
   "signupSuccess": "¡Registro completado con éxito! Por favor, inicia sesión para continuar.",
   "invalidEmailError": "La dirección de correo electrónico no es válida.",
   "emailExistsError": "La dirección de correo electrónico ya existe.",
-  "emailCheckError": "Por favor, introduce un formato de correo electrónico válido (por ejemplo, test@moa.com)"
+  "emailCheckError": "Por favor, introduce un formato de correo electrónico válido (por ejemplo, test@moa.com)",
+  "emailExistsSuccess": "La dirección de correo electrónico está disponible."
 }

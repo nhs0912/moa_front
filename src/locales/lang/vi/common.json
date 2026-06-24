@@ -24,5 +24,6 @@
   "signupSuccess": "Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.",
   "invalidEmailError": "Địa chỉ email không hợp lệ.",
   "emailExistsError": "Địa chỉ email đã tồn tại.",
-  "emailCheckError": "Vui lòng nhập định dạng email hợp lệ (ví dụ: test@moa.com)"
+  "emailCheckError": "Vui lòng nhập định dạng email hợp lệ (ví dụ: test@moa.com)",
+  "emailExistsSuccess": "Địa chỉ email có thể sử dụng được."
 }

@@ -24,5 +24,6 @@
   "signupSuccess": "Sign up completed successfully! Please log in to continue.",
   "invalidEmailError": "The email address is invalid.",
   "emailExistsError": "The email address already exists.",
-  "emailCheckError": "Please enter a valid email format (e.g., test@moa.com)"
+  "emailCheckError": "Please enter a valid email format (e.g., test@moa.com)",
+  "emailExistsSuccess": "The email address is available."
 }

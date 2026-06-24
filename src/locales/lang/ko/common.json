@@ -24,5 +24,6 @@
   "signupSuccess": "회원가입이 완료되었습니다! 이제 로그인하여 사진모아를 시작해보세요.",
   "invalidEmailError": "이메일주소가 유효하지 않습니다.",
   "emailExistsError": "이미 존재하는 이메일 주소입니다. ",
-  "emailCheckError": "이메일형식에 맞도록 입력해주세요 (예: test@moa.com)"
+  "emailCheckError": "이메일형식에 맞도록 입력해주세요 (예: test@moa.com)",
+  "emailExistsSuccess": "사용 가능한 이메일 주소입니다."
 }

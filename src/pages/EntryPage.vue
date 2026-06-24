@@ -158,8 +158,9 @@
                 {{ t('passwordMismatchError') }}
               </p>
 
-              <button type="submit" :disabled="isPasswordMisMatch"
-                :class="['login-btn mt-4 transition-colors', isPasswordMisMatch ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed' : 'bg-zinc-950 text-white']">
+              <button type="submit" :disabled="isPasswordMisMatch || isSignupDisabled" :class="['login-btn mt-4 transition-colors', isPasswordMisMatch || isSignupDisabled ?
+                'bg-zinc-300 text-zinc-500 cursor-not-allowed' :
+                isSubmitting ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed' : 'bg-zinc-950 text-white']">
                 {{ emailMode === 'login' ? t('loginBtn') : t('signupBtn') }}
               </button>
             </form>
@@ -324,11 +325,22 @@ watch(emailInput, () => {
   isEmailAvailable.value = null
 })
 
+const isSignupDisabled = computed(() => {
+  if (emailMode.value !== 'signup') {
+    return isSubmitting.value
+  }
+
+  return (
+    isSubmitting.value ||
+    isPasswordMisMatch.value ||
+    isEmailAvailable.value !== true
+  )
+})
+
 const handleEmailBlur = async () => {
   if (emailMode.value !== 'signup' || !emailInput.value) {
     return
   }
-
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(emailInput.value)) {
     isEmailAvailable.value = false
@@ -344,7 +356,7 @@ const handleEmailBlur = async () => {
       emailErrorMessage.value = t('emailExistsError')
     } else {
       isEmailAvailable.value = true
-      emailErrorMessage.value = ''
+      emailErrorMessage.value = t('emailExistsSuccess')
     }
   } catch (error) {
     console.error('Error checking email:', error)
