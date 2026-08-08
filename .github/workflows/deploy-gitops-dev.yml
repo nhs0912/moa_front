@@ -1,0 +1,103 @@
+name: Deploy Frontend to GitOps Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+
+env:
+  IMAGE_NAME: nhs0912/sajin-moa-frontend
+  GITOPS_REPOSITORY: nhs0912/moa-gitops
+  GITOPS_BRANCH: main
+  KUSTOMIZE_PATH: workloads/sajin-moa/overlays/dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Frontend 소스 checkout
+      - name: Checkout frontend repository
+        uses: actions/checkout@v4
+
+      # 2. commit SHA 7자리 생성
+      - name: Set image tag
+        id: vars
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          IMAGE_TAG="dev-${SHORT_SHA}"
+
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+          echo "IMAGE_TAG=${IMAGE_TAG}"
+
+      # 3. QEMU
+      # Raspberry Pi / ARM64 환경에서 실행할 경우 필요
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 4. Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 5. Docker Hub 로그인
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 6. Vue Docker image 빌드 및 push
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          tags: |
+            docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+            docker.io/${{ env.IMAGE_NAME }}:dev
+
+      # 7. GitOps 저장소 checkout
+      - name: Checkout GitOps repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.GITOPS_REPOSITORY }}
+          ref: ${{ env.GITOPS_BRANCH }}
+          token: ${{ secrets.GITOPS_TOKEN }}
+          path: moa-gitops
+
+      # 8. Kustomize 설치
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      # 9. frontend image tag 변경
+      - name: Update frontend image tag
+        working-directory: moa-gitops/${{ env.KUSTOMIZE_PATH }}
+        run: |
+          kustomize edit set image \
+            docker.io/nhs0912/moa-frontend=docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+
+          echo "----- Updated kustomization.yaml -----"
+          cat kustomization.yaml
+
+      # 10. GitOps 저장소 commit / push
+      - name: Commit and push GitOps changes
+        working-directory: moa-gitops
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add ${{ env.KUSTOMIZE_PATH }}/kustomization.yaml
+
+          if git diff --cached --quiet; then
+            echo "No GitOps changes"
+            exit 0
+          fi
+
+          git commit -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
+          git push origin ${{ env.GITOPS_BRANCH }}
