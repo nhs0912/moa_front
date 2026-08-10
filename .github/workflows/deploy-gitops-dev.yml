@@ -36,7 +36,6 @@ jobs:
           echo "IMAGE_TAG=${IMAGE_TAG}"
 
       # 3. QEMU
-      # Raspberry Pi / ARM64 환경에서 실행할 경우 필요
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -92,7 +91,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add ${{ env.KUSTOMIZE_PATH }}/kustomization.yaml
+          git add "${{ env.KUSTOMIZE_PATH }}/kustomization.yaml"
 
           if git diff --cached --quiet; then
             echo "No GitOps changes"
@@ -100,4 +99,39 @@ jobs:
           fi
 
           git commit -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
-          git push origin ${{ env.GITOPS_BRANCH }}
+          git push origin "${{ env.GITOPS_BRANCH }}"
+
+      # 11. 성공 알림
+      - name: Telegram success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ✅ MOA Frontend GitOps Build Success
+
+            Image : ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+            Branch : ${{ github.ref_name }}
+            Commit : ${{ github.sha }}
+
+            GitOps 저장소 업데이트 완료
+            Argo CD가 Frontend 배포를 진행합니다.
+
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      # 12. 실패 알림
+      - name: Telegram failed
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ❌ MOA Frontend GitOps Build Failed
+
+            Repository : ${{ github.repository }}
+            Branch : ${{ github.ref_name }}
+            Commit : ${{ github.sha }}
+
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
