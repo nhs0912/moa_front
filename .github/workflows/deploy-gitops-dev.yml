@@ -116,7 +116,7 @@ jobs:
               Branch: \`${{ github.ref_name }}\`\n\
               Commit: \`${{ github.sha }}\`\n\
               Image: \`${IMAGE_NAME}:dev-${SHORT_SHA}\`\n\
-              GitOps 저장소 업데이트 완료\"
+              GitOps 저장소 업데이트 완료 \"
             }" \
             "$DISCORD_WEBHOOK_URL"
 
