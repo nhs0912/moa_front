@@ -101,3 +101,38 @@ jobs:
 
           git commit -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
           git push origin ${{ env.GITOPS_BRANCH }}
+
+      #11. DISCORD SUCCESS MESSAGE 
+      - name: Discord notification - success
+        if: success()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{
+              \"content\": \"✅ **sajin-moa Frontend CI 완료**\n\
+              Repository: \`${{ github.repository }}\`\n\
+              Branch: \`${{ github.ref_name }}\`\n\
+              Commit: \`${{ github.sha }}\`\n\
+              Image: \`${IMAGE_NAME}:dev-${SHORT_SHA}\`\n\
+              GitOps 저장소 업데이트 완료\"
+            }" \
+            "$DISCORD_WEBHOOK_URL"
+
+      #12. DISCORD FAIL MESSAGE
+      - name: Discord notification - failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{
+              \"content\": \"❌ **sajin-moa FrontEnd CI 실패**\n\
+              Repository: \`${{ github.repository }}\`\n\
+              Branch: \`${{ github.ref_name }}\`\n\
+              Commit: \`${{ github.sha }}\`\n\
+              Actions 실행을 확인해주세요.\"
+            }" \
+            "$DISCORD_WEBHOOK_URL"
