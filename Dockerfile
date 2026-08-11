@@ -8,7 +8,9 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+ARG BUILD_ENV=dev
+
+RUN npm run build-only:${BUILD_ENV}
 
 
 FROM nginx:alpine

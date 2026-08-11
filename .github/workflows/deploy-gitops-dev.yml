@@ -57,6 +57,10 @@ jobs:
           context: .
           push: true
           platforms: linux/arm64
+
+          build-args: |
+            BUILD_ENV=dev
+
           tags: |
             docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
             docker.io/${{ env.IMAGE_NAME }}:dev
