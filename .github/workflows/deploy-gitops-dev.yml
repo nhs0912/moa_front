@@ -16,16 +16,29 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+
+    # ARM64 Native GitHub Runner
+    # 기존 ubuntu-latest(x86_64) + QEMU 조합 제거
+    runs-on: ubuntu-24.04-arm
 
     steps:
+
+      # ---------------------------------------------------------
       # 1. Frontend 소스 checkout
+      # ---------------------------------------------------------
       - name: Checkout frontend repository
         uses: actions/checkout@v4
 
-      # 2. commit SHA 7자리 생성
+
+      # ---------------------------------------------------------
+      # 2. Docker Image Tag 생성
+      #
+      # 예:
+      # dev-a12bc34
+      # ---------------------------------------------------------
       - name: Set image tag
         id: vars
+        shell: bash
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
           IMAGE_TAG="dev-${SHORT_SHA}"
@@ -33,29 +46,50 @@ jobs:
           echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
           echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
 
-          echo "IMAGE_TAG=${IMAGE_TAG}"
+          echo "--------------------------------"
+          echo "SHORT_SHA = ${SHORT_SHA}"
+          echo "IMAGE_TAG = ${IMAGE_TAG}"
+          echo "--------------------------------"
 
-      # 3. QEMU
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
-      # 4. Docker Buildx
+      # ---------------------------------------------------------
+      # 3. Docker Buildx
+      #
+      # ARM64 Native Runner이므로 QEMU 필요 없음
+      # ---------------------------------------------------------
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 5. Docker Hub 로그인
+
+      # ---------------------------------------------------------
+      # 4. Docker Hub 로그인
+      # ---------------------------------------------------------
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 6. Vue Docker image 빌드 및 push
+
+      # ---------------------------------------------------------
+      # 5. Frontend Docker Image Build + Push
+      #
+      # ARM64 Native Build
+      #
+      # Docker Hub:
+      #
+      # nhs0912/sajin-moa-frontend:dev-a12bc34
+      # nhs0912/sajin-moa-frontend:dev
+      #
+      # 두 개 Tag 생성
+      # ---------------------------------------------------------
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+
+          # Raspberry Pi ARM64
           platforms: linux/arm64
 
           build-args: |
@@ -65,7 +99,16 @@ jobs:
             docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
             docker.io/${{ env.IMAGE_NAME }}:dev
 
-      # 7. GitOps 저장소 checkout
+          # 이전 Docker Layer Cache 사용
+          cache-from: type=gha
+
+          # 다음 build를 위해 cache 저장
+          cache-to: type=gha,mode=max
+
+
+      # ---------------------------------------------------------
+      # 6. GitOps 저장소 Checkout
+      # ---------------------------------------------------------
       - name: Checkout GitOps repository
         uses: actions/checkout@v4
         with:
@@ -74,21 +117,40 @@ jobs:
           token: ${{ secrets.GITOPS_TOKEN }}
           path: moa-gitops
 
-      # 8. Kustomize 설치
+
+      # ---------------------------------------------------------
+      # 7. Kustomize 설치
+      # ---------------------------------------------------------
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
 
-      # 9. frontend image tag 변경
+
+      # ---------------------------------------------------------
+      # 8. GitOps Kustomize Image Tag 변경
+      #
+      # 기존:
+      #
+      # docker.io/nhs0912/moa-frontend
+      #
+      # →
+      #
+      # docker.io/nhs0912/sajin-moa-frontend:dev-a12bc34
+      #
+      # ---------------------------------------------------------
       - name: Update frontend image tag
         working-directory: moa-gitops/${{ env.KUSTOMIZE_PATH }}
         run: |
           kustomize edit set image \
             docker.io/nhs0912/moa-frontend=docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
 
+          echo ""
           echo "----- Updated kustomization.yaml -----"
           cat kustomization.yaml
 
-      # 10. GitOps 저장소 commit / push
+
+      # ---------------------------------------------------------
+      # 9. GitOps 변경사항 Commit + Push
+      # ---------------------------------------------------------
       - name: Commit and push GitOps changes
         working-directory: moa-gitops
         run: |
@@ -102,40 +164,58 @@ jobs:
             exit 0
           fi
 
-          git commit -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
+          git commit \
+            -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
+
           git push origin "${{ env.GITOPS_BRANCH }}"
 
-      # 11. 성공 알림
+
+      # ---------------------------------------------------------
+      # 10. Telegram 성공 알림
+      # ---------------------------------------------------------
       - name: Telegram success
         if: success()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
           message: |
-            ✅ MOA Frontend GitOps Build Success
+            ✅ MOA Frontend CI / GitOps Success
 
-            Image : ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
-            Branch : ${{ github.ref_name }}
-            Commit : ${{ github.sha }}
+            Environment : DEV
+            Image       : ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+            Branch      : ${{ github.ref_name }}
+            Commit      : ${{ github.sha }}
 
-            GitOps 저장소 업데이트 완료
-            Argo CD가 Frontend 배포를 진행합니다.
+            🐳 Docker Hub Image Push 완료
+            📦 GitOps Repository 업데이트 완료
 
+            🚀 Argo CD가 Frontend 배포를 진행합니다.
+
+            GitHub Actions:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      # 12. 실패 알림
+
+      # ---------------------------------------------------------
+      # 11. Telegram 실패 알림
+      # ---------------------------------------------------------
       - name: Telegram failed
         if: failure()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
           message: |
-            ❌ MOA Frontend GitOps Build Failed
+            ❌ MOA Frontend CI / GitOps Failed
 
-            Repository : ${{ github.repository }}
-            Branch : ${{ github.ref_name }}
-            Commit : ${{ github.sha }}
+            Environment : DEV
+            Repository  : ${{ github.repository }}
+            Branch      : ${{ github.ref_name }}
+            Commit      : ${{ github.sha }}
 
+            ⚠️ Docker Build 또는 GitOps 업데이트에 실패했습니다.
+
+            GitHub Actions:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
