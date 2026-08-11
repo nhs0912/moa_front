@@ -141,7 +141,7 @@ jobs:
         working-directory: moa-gitops/${{ env.KUSTOMIZE_PATH }}
         run: |
           kustomize edit set image \
-            docker.io/nhs0912/moa-frontend=docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
+            docker.io/nhs0912/sajin-moa-frontend=docker.io/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
 
           echo ""
           echo "----- Updated kustomization.yaml -----"
