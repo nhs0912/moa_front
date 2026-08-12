@@ -9,7 +9,7 @@
       class="absolute top-6 left-6 z-50 flex items-center gap-1.5 font-mono text-[10px] font-bold select-none px-2 py-0.5 rounded-md bg-zinc-100/80 backdrop-blur-sm"
       :class="modeStyle.text">
       <span class="h-1 w-1 rounded-full animate-pulse" :class="modeStyle.dot"></span>
-      <span>{{ modeStyle.label }} v0.0.2</span>
+      <span>{{ modeStyle.label }} v0.0.3</span>
     </div>
 
     <div class="absolute top-6 right-6 z-50" ref="dropdownRef">

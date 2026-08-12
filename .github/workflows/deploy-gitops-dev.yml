@@ -16,19 +16,16 @@ env:
 
 jobs:
   build-and-deploy:
-
     # ARM64 Native GitHub Runner
     # 기존 ubuntu-latest(x86_64) + QEMU 조합 제거
     runs-on: ubuntu-24.04-arm
 
     steps:
-
       # ---------------------------------------------------------
       # 1. Frontend 소스 checkout
       # ---------------------------------------------------------
       - name: Checkout frontend repository
         uses: actions/checkout@v4
-
 
       # ---------------------------------------------------------
       # 2. Docker Image Tag 생성
@@ -51,7 +48,6 @@ jobs:
           echo "IMAGE_TAG = ${IMAGE_TAG}"
           echo "--------------------------------"
 
-
       # ---------------------------------------------------------
       # 3. Docker Buildx
       #
@@ -59,7 +55,6 @@ jobs:
       # ---------------------------------------------------------
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
 
       # ---------------------------------------------------------
       # 4. Docker Hub 로그인
@@ -69,7 +64,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
 
       # ---------------------------------------------------------
       # 5. Frontend Docker Image Build + Push
@@ -105,7 +99,6 @@ jobs:
           # 다음 build를 위해 cache 저장
           cache-to: type=gha,mode=max
 
-
       # ---------------------------------------------------------
       # 6. GitOps 저장소 Checkout
       # ---------------------------------------------------------
@@ -117,13 +110,11 @@ jobs:
           token: ${{ secrets.GITOPS_TOKEN }}
           path: moa-gitops
 
-
       # ---------------------------------------------------------
       # 7. Kustomize 설치
       # ---------------------------------------------------------
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
-
 
       # ---------------------------------------------------------
       # 8. GitOps Kustomize Image Tag 변경
@@ -147,7 +138,6 @@ jobs:
           echo "----- Updated kustomization.yaml -----"
           cat kustomization.yaml
 
-
       # ---------------------------------------------------------
       # 9. GitOps 변경사항 Commit + Push
       # ---------------------------------------------------------
@@ -168,7 +158,6 @@ jobs:
             -m "deploy(frontend): ${{ steps.vars.outputs.image_tag }}"
 
           git push origin "${{ env.GITOPS_BRANCH }}"
-
 
       # ---------------------------------------------------------
       # 10. Telegram 성공 알림
@@ -195,7 +184,6 @@ jobs:
 
             GitHub Actions:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
 
       # ---------------------------------------------------------
       # 11. Telegram 실패 알림
@@ -238,7 +226,6 @@ jobs:
             }" \
             "$DISCORD_WEBHOOK_URL"
 
-        
       - name: Discord notification - failure
         if: failure()
         env:
