@@ -9,7 +9,7 @@
       class="absolute top-6 left-6 z-50 flex items-center gap-1.5 font-mono text-[10px] font-bold select-none px-2 py-0.5 rounded-md bg-zinc-100/80 backdrop-blur-sm"
       :class="modeStyle.text">
       <span class="h-1 w-1 rounded-full animate-pulse" :class="modeStyle.dot"></span>
-      <span>{{ modeStyle.label }} v0.0.3</span>
+      <span>{{ modeStyle.label }} v0.0.31</span>
     </div>
 
     <div class="absolute top-6 right-6 z-50" ref="dropdownRef">
@@ -163,6 +163,20 @@
                 isSubmitting ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed' : 'bg-zinc-950 text-white']">
                 {{ emailMode === 'login' ? t('loginBtn') : t('signupBtn') }}
               </button>
+              <!-- <button type="submit" :disabled="isSignupDisabled" :class="[
+                'login-btn mt-4 transition-colors',
+                isSignupDisabled
+                  ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed'
+                  : 'bg-zinc-950 text-white'
+              ]">
+                {{
+                  isCheckingEmail
+                    ? 'Checking...'
+                    : emailMode === 'login'
+                      ? t('loginBtn')
+                      : t('signupBtn')
+                }}
+              </button> -->
             </form>
           </div>
 
@@ -323,6 +337,17 @@ const emailErrorMessage = ref('')
 
 watch(emailInput, () => {
   isEmailAvailable.value = null
+  emailErrorMessage.value = ''
+})
+
+watch(emailMode, async (mode) => {
+  if (mode == 'signup' && emailInput.value.trim()) {
+    await checkEmailAvailability()
+  }
+  if (mode == 'login') {
+    isEmailAvailable.value = null
+    emailErrorMessage.value = ''
+  }
 })
 
 const isSignupDisabled = computed(() => {
@@ -332,36 +357,90 @@ const isSignupDisabled = computed(() => {
 
   return (
     isSubmitting.value ||
+    isCheckingEmail.value ||
     isPasswordMisMatch.value ||
     isEmailAvailable.value !== true
   )
 })
 
 const handleEmailBlur = async () => {
-  if (emailMode.value !== 'signup' || !emailInput.value) {
-    return
+  checkEmailAvailability()
+  // if (emailMode.value !== 'signup' || !emailInput.value) {
+  //   return
+  // }
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  // if (!emailRegex.test(emailInput.value)) {
+  //   isEmailAvailable.value = false
+  //   emailErrorMessage.value = t('invalidEmailError')
+  //   return
+  // }
+
+  // try {
+  //   const response = await checkEmailExists(emailInput.value)
+  //   const isDuplicate = response.isExistEmail
+  //   if (isDuplicate) {
+  //     isEmailAvailable.value = false
+  //     emailErrorMessage.value = t('emailExistsError')
+  //   } else {
+  //     isEmailAvailable.value = true
+  //     emailErrorMessage.value = t('emailExistsSuccess')
+  //   }
+  // } catch (error) {
+  //   console.error('Error checking email:', error)
+  //   isEmailAvailable.value = false
+  //   emailErrorMessage.value = t('emailCheckError')
+  // }
+}
+
+
+const isCheckingEmail = ref(false)
+
+const checkEmailAvailability = async (): Promise<boolean> => {
+  if (emailMode.value !== 'signup') {
+    return false
   }
+
+  const email = emailInput.value.trim().toLowerCase()
+
+  if (!email) {
+    isEmailAvailable.value = null
+    return false
+  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(emailInput.value)) {
+
+  if (!emailRegex.test(email)) {
     isEmailAvailable.value = false
     emailErrorMessage.value = t('invalidEmailError')
-    return
+    return false
   }
 
   try {
-    const response = await checkEmailExists(emailInput.value)
-    const isDuplicate = response.isExistEmail
-    if (isDuplicate) {
+    isCheckingEmail.value = true
+
+    const response = await checkEmailExists(email)
+
+    // 검사 도중 사용자가 이메일을 변경한 경우 이전 검사 결과 무시
+    if (emailInput.value.trim().toLowerCase() !== email) {
+      return false
+    }
+
+    if (response.isExistEmail) {
       isEmailAvailable.value = false
       emailErrorMessage.value = t('emailExistsError')
-    } else {
-      isEmailAvailable.value = true
-      emailErrorMessage.value = t('emailExistsSuccess')
+      return false
     }
+
+    isEmailAvailable.value = true
+    emailErrorMessage.value = t('emailExistsSuccess')
+    return true
   } catch (error) {
     console.error('Error checking email:', error)
     isEmailAvailable.value = false
     emailErrorMessage.value = t('emailCheckError')
+    return false
+  } finally {
+    isCheckingEmail.value = false
   }
 }
 
