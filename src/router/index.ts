@@ -3,6 +3,7 @@ import EntryPage from "../pages/EntryPage.vue";
 import uploadPage from "../pages/UploadPage.vue";
 import AccessPage from "../pages/AccessPage.vue";
 import GalleryPage from "../pages/GalleryPage.vue";
+import EventListPage from "../pages/EventListPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -28,6 +29,12 @@ const routes: RouteRecordRaw[] = [
     path: "/e/:eventCode/gallery",
     name: "gallery",
     component: GalleryPage,
+  },
+
+  {
+    path: "/events",
+    name: "events",
+    component: EventListPage,
   },
 ];
 

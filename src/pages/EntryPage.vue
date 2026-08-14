@@ -11,7 +11,7 @@
       <span class="h-1 w-1 rounded-full animate-pulse" :class="modeStyle.dot"></span>
 
       <span>
-        {{ modeStyle.label }} v0.0.32
+        {{ modeStyle.label }} v0.0.33
       </span>
     </div>
 
@@ -637,6 +637,9 @@ watch(
       }, 500)
   }
 )
+import { useRouter } from 'vue-router'
+//Router
+const router = useRouter()
 
 
 // ================================
@@ -887,6 +890,11 @@ const handleSubmit =
           t('loginSuccess'),
           'success'
         )
+        localStorage.setItem('accessToken', result.data.accessToken)
+
+        await router.push({
+          name: 'events'
+        })
 
         // TODO:
         // JWT 저장
