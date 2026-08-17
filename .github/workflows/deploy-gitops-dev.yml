@@ -176,6 +176,7 @@ jobs:
             Image       : ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}
             Branch      : ${{ github.ref_name }}
             Commit      : ${{ github.sha }}
+            Message     : ${{ github.event.head_commit.message }}
 
             🐳 Docker Hub Image Push 완료
             📦 GitOps Repository 업데이트 완료
@@ -202,42 +203,56 @@ jobs:
             Repository  : ${{ github.repository }}
             Branch      : ${{ github.ref_name }}
             Commit      : ${{ github.sha }}
+            Message     : ${{ github.event.head_commit.message }}
 
             ⚠️ Docker Build 또는 GitOps 업데이트에 실패했습니다.
 
             GitHub Actions:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      #12. Discord Success Message
+      # ---------------------------------------------------------
+      # 12. Discord 성공 알림
+      # ---------------------------------------------------------
       - name: Discord notification - success
         if: success()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
+          ESCAPED_MSG=$(echo "$COMMIT_MSG" | jq -aR .)
+
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "{
-              \"content\": \"✅ **sajin-moa Fronted CI 완료**\n\
+              \"content\": \"✅ **sajin-moa Frontend CI 완료**\n\
               Repository: \`${{ github.repository }}\`\n\
               Branch: \`${{ github.ref_name }}\`\n\
               Commit: \`${{ github.sha }}\`\n\
-              Image: \`${IMAGE_NAME}:dev-${SHORT_SHA}\`\n\
-              GitOps Fronted 저장소 업데이트 완료\"
+              Message: ${ESCAPED_MSG}\n\
+              Image: \`${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.image_tag }}\`\n\
+              GitOps Frontend 저장소 업데이트 완료\"
             }" \
             "$DISCORD_WEBHOOK_URL"
 
+      # ---------------------------------------------------------
+      # 13. Discord 실패 알림
+      # ---------------------------------------------------------
       - name: Discord notification - failure
         if: failure()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
+          ESCAPED_MSG=$(echo "$COMMIT_MSG" | jq -aR .)
+
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "{
-              \"content\": \"❌ **sajin-moa Fronted CI 실패**\n\
+              \"content\": \"❌ **sajin-moa Frontend CI 실패**\n\
               Repository: \`${{ github.repository }}\`\n\
               Branch: \`${{ github.ref_name }}\`\n\
               Commit: \`${{ github.sha }}\`\n\
-              Github Actions 실행을 확인해주세요.\"
+              Message: ${ESCAPED_MSG}\n\
+              GitHub Actions 실행을 확인해주세요.\"
             }" \
             "$DISCORD_WEBHOOK_URL"
