@@ -11,7 +11,7 @@
       <span class="h-1 w-1 rounded-full animate-pulse" :class="modeStyle.dot"></span>
 
       <span>
-        {{ modeStyle.label }} v0.0.33
+        {{ modeStyle.label }} v0.0.34
       </span>
     </div>
 
